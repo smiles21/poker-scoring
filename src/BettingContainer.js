@@ -1,10 +1,6 @@
-import './BettingContainer.css'
-
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Unstable_Grid2';
 import Typography from '@mui/material/Typography';
-
-import { useTheme } from '@mui/material/styles';
 
 function BettingContainer(props) {
   const {
@@ -17,7 +13,6 @@ function BettingContainer(props) {
     handleBigBet,
     handleFold,
   } = props;
-  const theme = useTheme();
 
   return (
     <Grid className={className} container rowSpacing={2}>

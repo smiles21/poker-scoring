@@ -5,7 +5,7 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 
 import BettingContainer from './BettingContainer';
 import TurnAndPotContainer from './TurnAndPotContainer';
-import utils from './utils';
+import { getOtherPlayer } from './utils';
 
 const theme = createTheme({});
 
@@ -20,7 +20,7 @@ function App() {
   }
 
   function advanceToNextTurn() {
-    setPlayerTurn(utils.getOtherPlayer(playerTurn));
+    setPlayerTurn(getOtherPlayer(playerTurn));
   }
 
   function handleCheck(player) {
@@ -47,11 +47,11 @@ function App() {
 
   function handleFold(player) {
     return function() {
-      const winnerPlayer = utils.getOtherPlayer(player);
+      const winnerPlayer = getOtherPlayer(player);
       setStacks({ ...stacks, [winnerPlayer]: stacks[winnerPlayer] + potSize });
       setPotSize(0);
 
-      const newDealerPlayer = utils.getOtherPlayer(dealerPlayer)
+      const newDealerPlayer = getOtherPlayer(dealerPlayer)
       setDealerPlayer(newDealerPlayer);
       setPlayerTurn(newDealerPlayer)
     }
