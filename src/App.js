@@ -1,24 +1,95 @@
-import logo from './logo.svg';
 import './App.css';
+import { useState } from 'react';
+import Stack from '@mui/material/Stack';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+
+import BettingContainer from './BettingContainer';
+import TurnAndPotContainer from './TurnAndPotContainer';
+import utils from './utils';
+
+const theme = createTheme({});
 
 function App() {
+  const [dealerPlayer, setDealerPlayer] = useState(0);
+  const [playerTurn, setPlayerTurn] = useState(0);
+  const [potSize, setPotSize] = useState(0);
+  const [stacks, setStacks] = useState({ 0: 400, 1: 400 });
+
+  function addToPot(betAmount) {
+    setPotSize(potSize + betAmount);
+  }
+
+  function advanceToNextTurn() {
+    setPlayerTurn(utils.getOtherPlayer(playerTurn));
+  }
+
+  function handleCheck(player) {
+    return function() {
+      advanceToNextTurn();
+    };
+  }
+
+  function handleSmallBet(player) {
+    return function() {
+      addToPot(10);
+      advanceToNextTurn();
+      setStacks({...stacks, [player]: stacks[player] - 10 });
+    };
+  }
+
+  function handleBigBet(player) {
+    return function() {
+      addToPot(20);
+      advanceToNextTurn();
+      setStacks({...stacks, [player]: stacks[player] - 20 });
+    };
+  }
+
+  function handleFold(player) {
+    return function() {
+      const winnerPlayer = utils.getOtherPlayer(player);
+      setStacks({ ...stacks, [winnerPlayer]: stacks[winnerPlayer] + potSize });
+      setPotSize(0);
+
+      const newDealerPlayer = utils.getOtherPlayer(dealerPlayer)
+      setDealerPlayer(newDealerPlayer);
+      setPlayerTurn(newDealerPlayer)
+    }
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider theme={theme}>
+      <Stack
+        className="App"
+        direction="column"
+        justifyContent="space-around"
+        spacing={2}
+      >
+        <BettingContainer
+          className="Player-zero"
+          disabled={playerTurn === 0}
+          isDealer={dealerPlayer === 0}
+          stack={stacks[0]}
+          handleFold={handleFold(0)}
+          handleCheck={handleCheck(0)}
+          handleSmallBet={handleSmallBet(0)}
+          handleBigBet={handleBigBet(0)}
+        />
+        <TurnAndPotContainer
+          playerTurn={playerTurn}
+          potSize={potSize}
+        />
+        <BettingContainer
+          disabled={playerTurn === 1}
+          isDealer={dealerPlayer === 1}
+          stack={stacks[1]}
+          handleFold={handleFold(1)}
+          handleCheck={handleCheck(1)}
+          handleSmallBet={handleSmallBet(1)}
+          handleBigBet={handleBigBet(1)}
+        />
+      </Stack>
+    </ThemeProvider>
   );
 }
 
