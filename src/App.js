@@ -14,7 +14,7 @@ function App() {
   const [playerTurn, setPlayerTurn] = useState(0);
   const [potSize, setPotSize] = useState(0);
   const [stacks, setStacks] = useState({ 0: 400, 1: 400 });
-  const [turnCount, setTurnCount] = useState(0);
+  const [turnCount, setTurnCount] = useState(1);
 
   function addToPot(betAmount) {
     setPotSize(potSize + betAmount);
