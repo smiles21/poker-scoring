@@ -14,6 +14,7 @@ function App() {
   const [playerTurn, setPlayerTurn] = useState(0);
   const [potSize, setPotSize] = useState(0);
   const [stacks, setStacks] = useState({ 0: 400, 1: 400 });
+  const [turnCount, setTurnCount] = useState(0);
 
   function addToPot(betAmount) {
     setPotSize(potSize + betAmount);
@@ -23,7 +24,7 @@ function App() {
     setPlayerTurn(getOtherPlayer(playerTurn));
   }
 
-  function handleCheck(player) {
+  function handleCheck() {
     return function() {
       advanceToNextTurn();
     };
@@ -51,9 +52,10 @@ function App() {
       setStacks({ ...stacks, [winnerPlayer]: stacks[winnerPlayer] + potSize });
       setPotSize(0);
 
-      const newDealerPlayer = getOtherPlayer(dealerPlayer)
+      const newDealerPlayer = getOtherPlayer(dealerPlayer);
       setDealerPlayer(newDealerPlayer);
-      setPlayerTurn(newDealerPlayer)
+      setPlayerTurn(newDealerPlayer);
+      setTurnCount(turnCount + 1);
     }
   }
 
@@ -62,7 +64,7 @@ function App() {
       <Stack
         className="App"
         direction="column"
-        justifyContent="space-around"
+        justifyContent="space-between"
         spacing={2}
       >
         <BettingContainer
@@ -76,8 +78,8 @@ function App() {
           handleBigBet={handleBigBet(0)}
         />
         <TurnAndPotContainer
-          playerTurn={playerTurn}
           potSize={potSize}
+          turnCount={turnCount}
         />
         <BettingContainer
           disabled={playerTurn === 1}

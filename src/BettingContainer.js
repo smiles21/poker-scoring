@@ -15,10 +15,11 @@ function BettingContainer(props) {
   } = props;
 
   return (
-    <Grid className={className} container rowSpacing={2}>
+    <Grid className={className} container rowSpacing={8}>
       <Grid xs={4}>
         <Button
           variant="outlined"
+          color="success"
           onClick={handleCheck}
           disabled={disabled}>
         Check
@@ -45,6 +46,7 @@ function BettingContainer(props) {
       <Grid xs={6}>
         <Button
           variant="outlined"
+          color="error"
           onClick={handleFold}
           disabled={disabled}
         >
