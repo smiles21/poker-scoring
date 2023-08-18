@@ -64,7 +64,7 @@ function App() {
       <Stack
         className="App"
         direction="column"
-        justifyContent="space-between"
+        justifyContent="space-around"
         spacing={2}
       >
         <BettingContainer
